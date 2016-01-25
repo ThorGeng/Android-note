@@ -1,0 +1,29 @@
+通过lsusb命令查出android设备的相关信息:
+thor@thor-Lenovo-G480:~$ lsusb
+Bus 002 Device 003: ID 04f2:b2e1 Chicony Electronics Co., Ltd 
+Bus 002 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 004: ID 0bda:0129 Realtek Semiconductor Corp. RTS5129 Card Reader Controller
+Bus 001 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 006: ID 19d2:ffcd ZTE WCDMA Technologies MSM 
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+看得出。19d2 ffcd是设备相关信息 
+然后更改相关文件
+1.创建相关文件并添加内容：
+thor@thor-Lenovo-G480:~$ cat /etc/udev/rules.d/30-android-devices.rules 
+SUBSYSTEM=='usb',
+ATTRS{idVendor}=='19d2'
+ATTRS{idProduct}=='ffcb'
+MODE=='0666'
+thor@thor-Lenovo-G480:~$ cat .android/adb_usb.ini 
+0x19d2
+2.重启udev服务
+thor@thor-Lenovo-G480:~$ sudo service udev restart
+[sudo] password for thor: 
+udev stop/waiting
+udev start/running, process 4544
+3.重新拔插手机，启动adb
+
+
